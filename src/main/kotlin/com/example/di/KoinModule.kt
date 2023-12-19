@@ -10,9 +10,8 @@ import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 
 val koinModule = module {
-//    System.getenv("MONGODB_URI")
     single {
-        KMongo.createClient()
+        KMongo.createClient(System.getenv("MONGODB_URI"))
             .coroutine
             .getDatabase(CHAT_DATABASE)
     }
