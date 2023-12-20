@@ -4,6 +4,7 @@ sealed class Endpoint(val path: String) {
     data object Root: Endpoint(path = "/")
     data object TokenVerification: Endpoint(path = "/token_verification")
     data object GetUserInfo: Endpoint(path = "/get_user")
+    data object GetUserInfoById: Endpoint(path = "/get_user_by_id")
     data object UpdateUserInfo: Endpoint(path = "/update_user")
     data object FetchUsers: Endpoint(path = "/fetch_users")
     data object AddUsers: Endpoint(path = "/add_users")

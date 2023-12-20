@@ -14,6 +14,7 @@ fun Application.configureRouting() {
         rootRoute()
         tokenVerificationRoute(application,userDataSource)
         getUserInfoRoute(application,userDataSource)
+        getUserInfoByIdRoute(application,userDataSource)
         updateUserRoute(application,userDataSource)
         deleteUserRoute(application,userDataSource)
         addChats(application,userDataSource,conversationDataSource)
