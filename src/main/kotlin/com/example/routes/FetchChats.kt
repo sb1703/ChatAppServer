@@ -21,7 +21,7 @@ fun Route.fetchChats(
         get(Endpoint.FetchChats.path) {
             try {
                 val page = call.request.queryParameters["page"]?.toInt() ?: 1
-                val limit = call.request.queryParameters["limit"]?.toInt() ?: 4
+                val limit = call.request.queryParameters["limit"]?.toInt() ?: 30
 
                 val userSession = call.principal<UserSession>()
                 val userId = call.receive<ApiRequest>().userId

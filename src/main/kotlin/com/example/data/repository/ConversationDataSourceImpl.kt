@@ -59,6 +59,21 @@ class ConversationDataSourceImpl(
         }
     }
 
+    override suspend fun fetchLastChat(user1: User, user2: User): ApiResponse {
+        val conversation = conversations.findOne(and(Conversation::member.contains(user1),Conversation::member.contains(user2)))
+        return if(conversation != null) {
+            ApiResponse(
+                success = true,
+                chat = conversation.messages.last()
+            )
+        } else {
+            ApiResponse(
+                success = false,
+                message = "No Last Message Found"
+            )
+        }
+    }
+
     override suspend fun addChats(user1: User, user2: User, msg: Message): Boolean {
         val conversation = conversations.findOne(and(Conversation::member.contains(user1), Conversation::member.contains(user2)))
         val list = conversation?.messages?.plus(msg)

@@ -23,7 +23,7 @@ fun Route.searchUsers(
         get(Endpoint.SearchUsers.path) {
             try {
                 val page = call.request.queryParameters["page"]?.toInt() ?: 1
-                val limit = call.request.queryParameters["limit"]?.toInt() ?: 4
+                val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
                 val userSession = call.principal<UserSession>()
                 val name = call.receive<ApiRequest>().name
                 if (userSession == null) {

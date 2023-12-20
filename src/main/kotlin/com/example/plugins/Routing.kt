@@ -19,6 +19,7 @@ fun Application.configureRouting() {
         addChats(application,userDataSource,conversationDataSource)
         addUsers(application,userDataSource)
         fetchChats(application,userDataSource,conversationDataSource)
+        fetchLastChat(application,userDataSource,conversationDataSource)
         fetchUsers(application,userDataSource)
         searchUsers(application,userDataSource)
         signOutRoute()

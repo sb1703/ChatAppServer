@@ -8,6 +8,7 @@ sealed class Endpoint(val path: String) {
     data object FetchUsers: Endpoint(path = "/fetch_users")
     data object AddUsers: Endpoint(path = "/add_users")
     data object FetchChats: Endpoint(path = "/fetch_chats")
+    data object FetchLastChat: Endpoint(path = "/fetch_last_chat")
     data object AddChats: Endpoint(path = "/add_chats")
     data object SearchUsers: Endpoint(path = "/search_users")
     data object DeleteUser: Endpoint(path = "/delete_user")

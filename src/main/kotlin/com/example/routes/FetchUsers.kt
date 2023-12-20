@@ -21,7 +21,7 @@ fun Route.fetchUsers(
         get(Endpoint.FetchUsers.path) {
             try {
                 val page = call.request.queryParameters["page"]?.toInt() ?: 1
-                val limit = call.request.queryParameters["limit"]?.toInt() ?: 4
+                val limit = call.request.queryParameters["limit"]?.toInt() ?: 10
                 val userSession = call.principal<UserSession>()
                 if (userSession == null) {
                     app.log.info("INVALID SESSION")

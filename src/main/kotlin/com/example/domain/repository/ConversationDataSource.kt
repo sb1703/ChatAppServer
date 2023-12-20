@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ConversationDataSource {
     suspend fun fetchChats(user1: User,user2: User,page: Int = 1,limit: Int = 4): ApiResponse
+    suspend fun fetchLastChat(user1: User,user2: User): ApiResponse
     suspend fun addChats(user1: User, user2: User, msg: Message): Boolean
 }
