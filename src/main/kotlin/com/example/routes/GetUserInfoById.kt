@@ -17,7 +17,7 @@ fun Route.getUserInfoByIdRoute(
     userDataSource: UserDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.GetUserInfoById.path) {
+        post(Endpoint.GetUserInfoById.path) {
             val userSession = call.principal<UserSession>()
             val userId = call.receive<ApiRequest>().userId
             if (userSession == null) {
