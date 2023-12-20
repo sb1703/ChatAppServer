@@ -58,15 +58,19 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
         emailAddress = emailAddress,
         profilePhoto = profilePhoto
     )
-
-    val response = userDataSource.saveUserInfo(user = user)
-    if (response) {
-        app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+    if(userDataSource.getUserInfoByMail(emailAddress) == null) {
+        val response = userDataSource.saveUserInfo(user = user)
+        if (response) {
+            app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+            call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+            call.respondRedirect(Endpoint.Authorized.path)
+        } else {
+            app.log.info("ERROR SAVING THE USER")
+            call.respondRedirect(Endpoint.Unauthorized.path)
+        }
+    } else {
         call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
         call.respondRedirect(Endpoint.Authorized.path)
-    } else {
-        app.log.info("ERROR SAVING THE USER")
-        call.respondRedirect(Endpoint.Unauthorized.path)
     }
 }
 
