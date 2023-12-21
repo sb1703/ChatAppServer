@@ -30,8 +30,10 @@ fun Route.fetchLastChat(
                         val user = userDataSource.getUserInfoByMail(mail = userSession.mail)
                         val user2 = userDataSource.getUserInfoById(userId = userId)
                         if (user != null && user2 != null) {
+                            val apiResponse = conversationDataSource.fetchLastChat(user,user2)
+                            apiResponse.message = apiResponse.chat?.author?.let { it1 -> userDataSource.getUserInfoById(userId = it1) }!!.name
                             call.respond(
-                                message = conversationDataSource.fetchLastChat(user,user2),
+                                message = apiResponse,
                                 status = HttpStatusCode.OK
                             )
                         } else {
