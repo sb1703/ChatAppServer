@@ -51,10 +51,8 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.updateUserInfo(
     val response = fetchUser?.userId?.let {
         userDataSource.updateUserInfo(
         userId = it,
-        firstName = userUpdate.firstName,
-        lastName = userUpdate.lastName
-    )
-    }
+        name = userUpdate.name
+    ) }
     if (response == true) {
         app.log.info("USER SUCCESSFULLY UPDATED")
         call.respond(

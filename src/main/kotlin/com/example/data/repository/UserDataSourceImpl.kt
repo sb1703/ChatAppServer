@@ -40,14 +40,13 @@ class UserDataSourceImpl(
 
     override suspend fun updateUserInfo(
         userId: String,
-        firstName: String,
-        lastName: String
+        name: String
     ): Boolean {
         return users.updateOne(
             filter = User::userId eq userId,
             update = setValue(
                 property = User::name,
-                value = "$firstName $lastName"
+                value = name
             )
         ).wasAcknowledged()
     }

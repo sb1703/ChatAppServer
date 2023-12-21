@@ -11,8 +11,7 @@ interface UserDataSource {
     suspend fun deleteUser(userId: String): Boolean
     suspend fun updateUserInfo(
         userId: String,
-        firstName: String,
-        lastName: String
+        name: String
     ): Boolean
     suspend fun fetchUsers(userId: String, page: Int = 1,limit: Int = 4): ApiResponse
     suspend fun addUsers(userId: String, userId2: String): Boolean
