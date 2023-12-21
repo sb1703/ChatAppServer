@@ -43,12 +43,6 @@ class ConversationDataSourceImpl(
                 )
             )
         } else {
-            conversations.insertOne(
-                Conversation(
-                    member = listOf(user1,user2),
-                    messages = emptyList()
-                )
-            )
             ApiResponse(
                 success = true,
                 message = "ok",
