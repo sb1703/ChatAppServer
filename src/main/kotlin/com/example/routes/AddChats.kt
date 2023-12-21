@@ -16,7 +16,7 @@ fun Route.addChats(
     conversationDataSource: ConversationDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.AddChats.path) {
+        post(Endpoint.AddChats.path) {
 //            val userId = call.request.queryParameters["userId"]
             val userSession = call.principal<UserSession>()
             val message = call.receive<ApiRequest>().message

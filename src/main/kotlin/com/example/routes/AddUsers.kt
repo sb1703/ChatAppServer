@@ -18,7 +18,7 @@ fun Route.addUsers(
     userDataSource: UserDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.AddUsers.path) {
+        post(Endpoint.AddUsers.path) {
 //            val userId = call.request.queryParameters["userId"]
             val userSession = call.principal<UserSession>()
             val userId = call.receive<ApiRequest>().userId

@@ -18,7 +18,7 @@ fun Route.fetchLastChat(
     conversationDataSource: ConversationDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.FetchLastChat.path) {
+        post(Endpoint.FetchLastChat.path) {
             val userSession = call.principal<UserSession>()
             val userId = call.receive<ApiRequest>().userId
             if (userSession == null) {

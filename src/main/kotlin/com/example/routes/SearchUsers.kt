@@ -20,7 +20,7 @@ fun Route.searchUsers(
     userDataSource: UserDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.SearchUsers.path) {
+        post(Endpoint.SearchUsers.path) {
             try {
                 val page = call.request.queryParameters["page"]?.toInt() ?: 1
                 val limit = call.request.queryParameters["limit"]?.toInt() ?: 10

@@ -18,7 +18,7 @@ fun Route.fetchChats(
     conversationDataSource: ConversationDataSource
 ) {
     authenticate("auth-session") {
-        get(Endpoint.FetchChats.path) {
+        post(Endpoint.FetchChats.path) {
             try {
                 val page = call.request.queryParameters["page"]?.toInt() ?: 1
                 val limit = call.request.queryParameters["limit"]?.toInt() ?: 30
