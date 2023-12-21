@@ -32,6 +32,7 @@ fun Route.addChats(
                             val user1 = userDataSource.getUserInfoById(userId = message.author)
                             val user2 = userDataSource.getUserInfoById(userId = message.receiver.first())
                             if(user1 != null && user2 != null) {
+                                message.authorName = user1.name
                                 call.respond(
                                     message = ApiResponse(
                                         success = conversationDataSource.addChats(user1,user2,message)
