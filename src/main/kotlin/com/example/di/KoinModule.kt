@@ -4,6 +4,7 @@ import com.example.data.repository.ConversationDataSourceImpl
 import com.example.data.repository.UserDataSourceImpl
 import com.example.domain.repository.ConversationDataSource
 import com.example.domain.repository.UserDataSource
+import com.example.room.RoomController
 import com.example.util.Constants.CHAT_DATABASE
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -18,7 +19,16 @@ val koinModule = module {
     single<UserDataSource> {
         UserDataSourceImpl(get())
     }
+//    single<MessageDataSource> {
+//        MessageDataSourceImpl(get())
+//    }
     single<ConversationDataSource> {
         ConversationDataSourceImpl(get())
     }
+    single {
+        RoomController(get(),get())
+    }
+//    single<ConversationDataSource> {
+//        ConversationDataSourceImpl(get())
+//    }
 }

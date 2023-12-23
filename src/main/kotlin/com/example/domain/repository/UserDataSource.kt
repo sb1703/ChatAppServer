@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserDataSource {
     suspend fun getUserInfoById(userId: String): User?
     suspend fun getUserInfoByMail(mail: String): User?
+    suspend fun getUserInfoByUserName(name: String): User?
     suspend fun saveUserInfo(user: User): Boolean
     suspend fun deleteUser(userId: String): Boolean
     suspend fun updateUserInfo(

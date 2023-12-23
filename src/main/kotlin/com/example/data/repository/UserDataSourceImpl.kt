@@ -25,6 +25,10 @@ class UserDataSourceImpl(
         return users.findOne(filter = User::emailAddress eq mail)
     }
 
+    override suspend fun getUserInfoByUserName(name: String): User? {
+        return users.findOne(filter = User::name eq name)
+    }
+
     override suspend fun saveUserInfo(user: User): Boolean {
         val existingUser = users.findOne(filter = User::userId eq user.userId)
         return if (existingUser == null) {

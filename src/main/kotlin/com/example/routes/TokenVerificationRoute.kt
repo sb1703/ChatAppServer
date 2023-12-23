@@ -56,7 +56,8 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
         id = sub,
         name = name,
         emailAddress = emailAddress,
-        profilePhoto = profilePhoto
+        profilePhoto = profilePhoto,
+        socket = null
     )
     if(userDataSource.getUserInfoByMail(emailAddress) == null) {
         val response = userDataSource.saveUserInfo(user = user)

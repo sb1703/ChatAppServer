@@ -1,5 +1,6 @@
 package com.example.domain.model
 
+import io.ktor.websocket.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId
@@ -15,5 +16,8 @@ data class User(
     val profilePhoto: String,
     val list: List<User> = emptyList(),
     val online: Boolean = false,
-    val lastLogin: Instant? = null
+    val lastLogin: Instant? = null,
+    val socket: WebSocketSession? = null
 )
+
+class UserAlreadyExistsException: Exception("There is already a user with that name in the room")

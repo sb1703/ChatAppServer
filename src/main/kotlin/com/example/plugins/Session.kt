@@ -2,6 +2,7 @@ package com.example.plugins
 
 import com.example.domain.model.UserSession
 import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCallPipeline.ApplicationPhase.Plugins
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import java.io.File
@@ -25,4 +26,11 @@ fun Application.configureSession() {
 //            cookie.secure = true
         }
     }
+
+//    intercept(Plugins) {
+//        if(call.sessions.get<UserSession>() == null){
+//            val username = call.parameters["username"] ?: "Guest"
+//            call.sessions.set(UserSession(username))
+//        }
+//    }
 }

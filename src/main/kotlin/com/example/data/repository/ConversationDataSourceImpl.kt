@@ -10,7 +10,6 @@ import com.example.util.Constants.PREVIOUS_PAGE_KEY
 import org.litote.kmongo.and
 import org.litote.kmongo.contains
 import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.coroutine.insertOne
 import org.litote.kmongo.eq
 import org.litote.kmongo.setValue
 
@@ -19,6 +18,22 @@ class ConversationDataSourceImpl(
 ): ConversationDataSource {
 
     private val conversations = database.getCollection<Conversation>()
+//    private val messages = database.getCollection<Message>()
+
+//    override suspend fun fetchChats(): ApiResponse {
+//        return ApiResponse(
+//            success = true,
+//            message = "ok",
+//            listMessages = messages.find()
+//                .descendingSort(Message::time)
+//                .toList()
+//        )
+//    }
+//
+//    override suspend fun addChats(msg: Message): Boolean {
+//        return messages.insertOne(msg).wasAcknowledged()
+//    }
+
 
     override suspend fun fetchChats(user1: User, user2: User, page: Int, limit: Int): ApiResponse {
         val conversation = conversations.findOne(and(Conversation::member.contains(user1),Conversation::member.contains(user2)))
