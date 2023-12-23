@@ -1,20 +1,17 @@
 package com.example.routes
 
-import com.example.domain.model.ApiRequest
 import com.example.domain.model.UserAlreadyExistsException
 import com.example.domain.model.UserSession
 import com.example.domain.repository.UserDataSource
 import com.example.room.RoomController
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
+import java.net.URLDecoder
 
 fun Route.chatSocket(
     roomController: RoomController,
@@ -23,7 +20,9 @@ fun Route.chatSocket(
     webSocket("/chat-socket") {
 //        val session = call.sessions.get<UserSession>()
         val session = call.principal<UserSession>()
-        val message = call.receive<ApiRequest>().message
+        val encodedReceiver = call.request.queryParameters["receiver"]
+        val receiver = encodedReceiver?.split(",")?.map { URLDecoder.decode(it, "UTF-8") }
+//        val message = call.receive<ApiRequest>().message
         if(session == null) {
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session."))
             return@webSocket
@@ -39,11 +38,11 @@ fun Route.chatSocket(
                     )
                     incoming.consumeEach { frame ->
                         if(frame is Frame.Text) {
-                            if (message != null) {
+                            if (receiver != null) {
                                 roomController.sendMessage(
                                     senderUserId = user.userId,
                                     message = frame.readText(),
-                                    receiverUserIds = message.receiver
+                                    receiverUserIds = receiver
                                     //  IMP - RECEIVER_USER_ID
                                 )
                             }
