@@ -41,21 +41,22 @@ class ConversationDataSourceImpl(
             ApiResponse(
                 success = true,
                 message = "ok",
-                prevPage = calculatePage(
-                    message = conversation.messages,
-                    page = page,
-                    limit = limit
-                )[PREVIOUS_PAGE_KEY],
-                nextPage = calculatePage(
-                    message = conversation.messages,
-                    page = page,
-                    limit = limit
-                )[NEXT_PAGE_KEY],
-                listMessages = provideMessages(
-                    message = conversation.messages,
-                    page = page,
-                    limit = limit
-                )
+                listMessages = conversation.messages
+//                prevPage = calculatePage(
+//                    message = conversation.messages,
+//                    page = page,
+//                    limit = limit
+//                )[PREVIOUS_PAGE_KEY],
+//                nextPage = calculatePage(
+//                    message = conversation.messages,
+//                    page = page,
+//                    limit = limit
+//                )[NEXT_PAGE_KEY],
+//                listMessages = provideMessages(
+//                    message = conversation.messages,
+//                    page = page,
+//                    limit = limit
+//                )
             )
         } else {
             ApiResponse(
@@ -104,39 +105,39 @@ class ConversationDataSourceImpl(
         }
     }
 
-    private fun calculatePage(
-        message: List<Message>,
-        page: Int,
-        limit: Int
-    ): Map<String,Int?> {
-
-        val allMessages = message.windowed(
-            size = limit,
-            step = limit,
-            partialWindows = true
-        )
-        require(page <= allMessages.size)
-        val prevPage = if(page==1) null else page-1
-        val nextPage = if(page == allMessages.size) null else page+1
-
-        return mapOf(
-            PREVIOUS_PAGE_KEY to prevPage,
-            NEXT_PAGE_KEY to nextPage
-        )
-    }
-
-    private fun provideMessages(
-        message: List<Message>,
-        page: Int,
-        limit: Int
-    ): List<Message> {
-        val allMessages = message.windowed(
-            size = limit,
-            step = limit,
-            partialWindows = true
-        )
-        require(page>0 && page<=allMessages.size)
-        return allMessages[page-1]
-    }
+//    private fun calculatePage(
+//        message: List<Message>,
+//        page: Int,
+//        limit: Int
+//    ): Map<String,Int?> {
+//
+//        val allMessages = message.windowed(
+//            size = limit,
+//            step = limit,
+//            partialWindows = true
+//        )
+//        require(page <= allMessages.size)
+//        val prevPage = if(page==1) null else page-1
+//        val nextPage = if(page == allMessages.size) null else page+1
+//
+//        return mapOf(
+//            PREVIOUS_PAGE_KEY to prevPage,
+//            NEXT_PAGE_KEY to nextPage
+//        )
+//    }
+//
+//    private fun provideMessages(
+//        message: List<Message>,
+//        page: Int,
+//        limit: Int
+//    ): List<Message> {
+//        val allMessages = message.windowed(
+//            size = limit,
+//            step = limit,
+//            partialWindows = true
+//        )
+//        require(page>0 && page<=allMessages.size)
+//        return allMessages[page-1]
+//    }
 
 }

@@ -24,7 +24,7 @@ fun Route.chatSocket(
         val receiver = encodedReceiver?.split(",")?.map { URLDecoder.decode(it, "UTF-8") }
 //        val message = call.receive<ApiRequest>().message
         if(session == null) {
-            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session."))
+            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
             return@webSocket
         }
         try {
