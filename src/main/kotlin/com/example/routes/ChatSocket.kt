@@ -42,6 +42,9 @@ fun Route.chatSocket(
         try {
             val user = userDataSource.getUserInfoByMail(session.mail)
             if (user != null) {
+                if (logger != null) {
+                    logger.info("sessionName2: ${user.userId}")
+                }
                 user.userId?.let {
                     roomController.onJoin(
                         userId = it,
@@ -51,6 +54,9 @@ fun Route.chatSocket(
                     incoming.consumeEach { frame ->
                         if(frame is Frame.Text) {
                             if (receiver != null) {
+                                if (logger != null) {
+                                    logger.info("frame: ${frame.readText()}")
+                                }
                                 roomController.sendMessage(
                                     senderUserId = user.userId,
                                     message = frame.readText(),

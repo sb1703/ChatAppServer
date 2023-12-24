@@ -17,6 +17,8 @@ class RoomController(
     private val userDataSource: UserDataSource
 ) {
 
+    val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+
 //    userId to User
     private val users = ConcurrentHashMap<String,User>()
 
@@ -25,6 +27,8 @@ class RoomController(
         sessionId: String,
         socket: WebSocketSession
     ) {
+
+        logger?.info("ONJOIN")
         if(users.containsKey(userId)){
             throw UserAlreadyExistsException()
         }
@@ -54,8 +58,10 @@ class RoomController(
         val user1 = userDataSource.getUserInfoById(senderUserId)
         val user2 = userDataSource.getUserInfoById(receiverUserIds[0])
 
-        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
         if (logger != null) {
+            logger.info("SENDMESSAGE")
+            logger.info("messageUsers: 1 - $user1.userId")
+            logger.info("messageUsers: 2 - $user2.userId")
             logger.info("message: $message")
         }
 
@@ -90,6 +96,7 @@ class RoomController(
     suspend fun tryDisconnect(
         userId: String
     ) {
+        logger?.info("DISCONNECT")
         users[userId]?.socket?.close()
         if(users.containsKey(userId)){
             users.remove(userId)
