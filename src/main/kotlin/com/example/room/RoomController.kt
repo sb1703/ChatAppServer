@@ -8,6 +8,7 @@ import com.example.domain.repository.UserDataSource
 import io.ktor.websocket.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
 class RoomController(
@@ -52,6 +53,11 @@ class RoomController(
     ) {
         val user1 = userDataSource.getUserInfoById(senderUserId)
         val user2 = userDataSource.getUserInfoById(receiverUserIds[0])
+
+        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+        if (logger != null) {
+            logger.info("message: $message")
+        }
 
         val messageEntity = Message(
             author = senderUserId,

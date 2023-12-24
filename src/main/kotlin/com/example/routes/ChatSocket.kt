@@ -11,7 +11,10 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
+import org.litote.kmongo.MongoOperator
+import org.slf4j.LoggerFactory
 import java.net.URLDecoder
+import java.util.logging.Logger
 
 fun Route.chatSocket(
     roomController: RoomController,
@@ -23,6 +26,15 @@ fun Route.chatSocket(
         val encodedReceiver = call.request.queryParameters["receiver"]
         val receiver = encodedReceiver?.split(",")?.map { URLDecoder.decode(it, "UTF-8") }
 //        val message = call.receive<ApiRequest>().message
+        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+        if (session != null) {
+            if (logger != null) {
+                logger.info("sessionName: ${session.name}")
+            }
+        }
+        if (logger != null) {
+            logger.info("receiver: ${receiver.toString()}")
+        }
         if(session == null) {
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
             return@webSocket

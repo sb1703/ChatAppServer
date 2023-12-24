@@ -12,6 +12,8 @@ import org.litote.kmongo.contains
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import org.litote.kmongo.setValue
+import org.slf4j.LoggerFactory
+import kotlin.math.log
 
 class ConversationDataSourceImpl(
     database: CoroutineDatabase
@@ -85,8 +87,16 @@ class ConversationDataSourceImpl(
     }
 
     override suspend fun addChats(user1: User, user2: User, msg: Message): Boolean {
+        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+        if (logger != null) {
+            logger.info("addChats: ${user1.userId} , ${user2.userId} , $msg")
+        }
         val conversation = conversations.findOne(and(Conversation::member.contains(user1), Conversation::member.contains(user2)))
         val list = conversation?.messages?.plus(msg)
+        if (logger != null) {
+            logger.info("conversation: ${conversation.toString()}")
+            logger.info("list: ${list.toString()}")
+        }
         return if (conversation != null) {
             conversations.updateOne(
                 filter = Conversation::conversationId eq conversation.conversationId,
