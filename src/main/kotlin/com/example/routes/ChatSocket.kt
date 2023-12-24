@@ -20,65 +20,67 @@ fun Route.chatSocket(
     roomController: RoomController,
     userDataSource: UserDataSource
 ) {
-    webSocket("/chat-socket") {
+    authenticate("auth-session"){
+        webSocket("/chat-socket") {
 //        val session = call.sessions.get<UserSession>()
-        val session = call.principal<UserSession>()
-        val encodedReceiver = call.request.queryParameters["receiver"]
-        val receiver = encodedReceiver?.split(",")?.map { URLDecoder.decode(it, "UTF-8") }
+            val session = call.principal<UserSession>()
+            val encodedReceiver = call.request.queryParameters["receiver"]
+            val receiver = encodedReceiver?.split(",")?.map { URLDecoder.decode(it, "UTF-8") }
 //        val message = call.receive<ApiRequest>().message
-        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
-        if (session != null) {
-            if (logger != null) {
-                logger.info("sessionName: ${session.name}")
-            }
-        }
-        if (logger != null) {
-            logger.info("receiver: ${receiver.toString()}")
-        }
-        if(session == null) {
-            if (logger != null) {
-                logger.info("Session is null")
-            }
-            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
-            return@webSocket
-        }
-        try {
-            val user = userDataSource.getUserInfoByMail(session.mail)
-            if (user != null) {
+            val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+            if (session != null) {
                 if (logger != null) {
-                    logger.info("sessionName2: ${user.userId}")
+                    logger.info("sessionName: ${session.name}")
                 }
-                user.userId?.let {
-                    roomController.onJoin(
-                        userId = it,
-                        sessionId = session.id,
-                        socket = this
-                    )
-                    incoming.consumeEach { frame ->
-                        if(frame is Frame.Text) {
-                            if (receiver != null) {
-                                if (logger != null) {
-                                    logger.info("frame: ${frame.readText()}")
+            }
+            if (logger != null) {
+                logger.info("receiver: ${receiver.toString()}")
+            }
+            if(session == null) {
+                if (logger != null) {
+                    logger.info("Session is null")
+                }
+                close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
+                return@webSocket
+            }
+            try {
+                val user = userDataSource.getUserInfoByMail(session.mail)
+                if (user != null) {
+                    if (logger != null) {
+                        logger.info("sessionName2: ${user.userId}")
+                    }
+                    user.userId?.let {
+                        roomController.onJoin(
+                            userId = it,
+                            sessionId = session.id,
+                            socket = this
+                        )
+                        incoming.consumeEach { frame ->
+                            if(frame is Frame.Text) {
+                                if (receiver != null) {
+                                    if (logger != null) {
+                                        logger.info("frame: ${frame.readText()}")
+                                    }
+                                    roomController.sendMessage(
+                                        senderUserId = user.userId,
+                                        message = frame.readText(),
+                                        receiverUserIds = receiver
+                                        //  IMP - RECEIVER_USER_ID
+                                    )
                                 }
-                                roomController.sendMessage(
-                                    senderUserId = user.userId,
-                                    message = frame.readText(),
-                                    receiverUserIds = receiver
-                                    //  IMP - RECEIVER_USER_ID
-                                )
                             }
                         }
                     }
                 }
-            }
-        } catch(e: UserAlreadyExistsException) {
-            call.respond(HttpStatusCode.Conflict)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            val user = userDataSource.getUserInfoByMail(session.mail)
-            if (user != null) {
-                user.userId?.let { roomController.tryDisconnect(it) }
+            } catch(e: UserAlreadyExistsException) {
+                call.respond(HttpStatusCode.Conflict)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                val user = userDataSource.getUserInfoByMail(session.mail)
+                if (user != null) {
+                    user.userId?.let { roomController.tryDisconnect(it) }
+                }
             }
         }
     }
