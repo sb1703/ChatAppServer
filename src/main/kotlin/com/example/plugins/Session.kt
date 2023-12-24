@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.domain.model.ChatSession
 import com.example.domain.model.UserSession
 import io.ktor.server.application.*
 import io.ktor.server.application.ApplicationCallPipeline.ApplicationPhase.Plugins
@@ -25,12 +26,15 @@ fun Application.configureSession() {
 //            can send cookie only through secure connection
 //            cookie.secure = true
         }
+
+        cookie<ChatSession>("CHAT_SESSION")
     }
 
-//    intercept(Plugins) {
-//        if(call.sessions.get<UserSession>() == null){
-//            val username = call.parameters["username"] ?: "Guest"
-//            call.sessions.set(UserSession(username))
-//        }
-//    }
+    intercept(Plugins) {
+        if(call.sessions.get<ChatSession>() == null){
+            val userId = call.parameters["userId"] ?: ""
+            val receiver = call.parameters["receiver"] ?: ""
+            call.sessions.set(ChatSession(userId,receiver, generateNonce()))
+        }
+    }
 }
