@@ -36,6 +36,7 @@ fun Route.chatSocket(
             logger.info("receiver: ${receiver.toString()}")
         }
         if(session == null) {
+            logger.info("Session is null")
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
             return@webSocket
         }
