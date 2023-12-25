@@ -10,9 +10,19 @@ interface UserDataSource {
     suspend fun getUserInfoByUserName(name: String): User?
     suspend fun saveUserInfo(user: User): Boolean
     suspend fun deleteUser(userId: String): Boolean
-    suspend fun updateUserInfo(
+    suspend fun updateUserName(
         userId: String,
         name: String
+    ): Boolean
+
+    suspend fun updateUserOnline(
+        userId: String,
+        online: Boolean
+    ): Boolean
+
+    suspend fun updateUserLastLogin(
+        userId: String,
+        lastLogin: String
     ): Boolean
     suspend fun fetchUsers(userId: String, page: Int = 1,limit: Int = 4): ApiResponse
     suspend fun addUsers(userId: String, userId2: String): Boolean

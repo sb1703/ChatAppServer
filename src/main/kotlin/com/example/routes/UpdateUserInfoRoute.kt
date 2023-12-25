@@ -48,12 +48,22 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.updateUserInfo(
     userDataSource: UserDataSource
 ) {
     val fetchUser = userDataSource.getUserInfoByMail(mail = mail)
-    val response = fetchUser?.userId?.let {
-        userDataSource.updateUserInfo(
+    val response1 = fetchUser?.userId?.let {
+        userDataSource.updateUserName(
         userId = it,
         name = userUpdate.name
     ) }
-    if (response == true) {
+    val response2 = fetchUser?.userId?.let {
+        userDataSource.updateUserOnline(
+            userId = it,
+            online = userUpdate.online
+        ) }
+    val response3 = fetchUser?.userId?.let {
+        userDataSource.updateUserLastLogin(
+            userId = it,
+            lastLogin = userUpdate.lastLogin
+        ) }
+    if (response1 == true && response2 == true && response3 == true) {
         app.log.info("USER SUCCESSFULLY UPDATED")
         call.respond(
             message = ApiResponse(

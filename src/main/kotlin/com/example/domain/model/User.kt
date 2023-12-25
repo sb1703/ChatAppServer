@@ -16,7 +16,7 @@ data class User(
     val profilePhoto: String,
     val list: List<User> = emptyList(),
     val online: Boolean = false,
-    val lastLogin: Instant? = null,
+    val lastLogin: String? = null,
     val socket: WebSocketSession? = null
 )
 

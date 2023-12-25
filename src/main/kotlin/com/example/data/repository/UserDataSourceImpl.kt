@@ -42,7 +42,7 @@ class UserDataSourceImpl(
         return users.deleteOne(filter = User::userId eq userId).wasAcknowledged()
     }
 
-    override suspend fun updateUserInfo(
+    override suspend fun updateUserName(
         userId: String,
         name: String
     ): Boolean {
@@ -51,6 +51,32 @@ class UserDataSourceImpl(
             update = setValue(
                 property = User::name,
                 value = name
+            )
+        ).wasAcknowledged()
+    }
+
+    override suspend fun updateUserOnline(
+        userId: String,
+        online: Boolean
+    ): Boolean {
+        return users.updateOne(
+            filter = User::userId eq userId,
+            update = setValue(
+                property = User::online,
+                value = online
+            )
+        ).wasAcknowledged()
+    }
+
+    override suspend fun updateUserLastLogin(
+        userId: String,
+        lastLogin: String
+    ): Boolean {
+        return users.updateOne(
+            filter = User::userId eq userId,
+            update = setValue(
+                property = User::lastLogin,
+                value = lastLogin
             )
         ).wasAcknowledged()
     }
