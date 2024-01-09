@@ -57,18 +57,22 @@ fun Route.chatSocket(
                         sessionId = session.sessionId,
                         socket = this
                     )
-                    incoming.consumeEach { frame ->
-                        if(frame is Frame.Text) {
-                            if (receiver != null) {
-                                if (logger != null) {
-                                    logger.info("frame: ${frame.readText()}")
+                    if (receiver != null) {
+                        if(receiver.isNotEmpty()){
+                            incoming.consumeEach { frame ->
+                                if (frame is Frame.Text) {
+                                    if (receiver != null) {
+                                        if (logger != null) {
+                                            logger.info("frame: ${frame.readText()}")
+                                        }
+                                        roomController.sendMessage(
+                                            senderUserId = user.userId,
+                                            message = frame.readText(),
+                                            receiverUserIds = receiver
+                                            //  IMP - RECEIVER_USER_ID
+                                        )
+                                    }
                                 }
-                                roomController.sendMessage(
-                                    senderUserId = user.userId,
-                                    message = frame.readText(),
-                                    receiverUserIds = receiver
-                                    //  IMP - RECEIVER_USER_ID
-                                )
                             }
                         }
                     }

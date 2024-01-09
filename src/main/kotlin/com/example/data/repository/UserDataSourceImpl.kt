@@ -88,21 +88,22 @@ class UserDataSourceImpl(
             ApiResponse(
                 success = true,
                 message = "ok",
-                prevPage = calculatePage(
-                    user = user.list,
-                    page = page,
-                    limit = limit
-                )[PREVIOUS_PAGE_KEY],
-                nextPage = calculatePage(
-                    user = user.list,
-                    page = page,
-                    limit = limit
-                )[NEXT_PAGE_KEY],
-                listUsers = provideUsers(
-                    user = user.list,
-                    page = page,
-                    limit = limit
-                )
+                listUsers = user.list
+//                prevPage = calculatePage(
+//                    user = user.list,
+//                    page = page,
+//                    limit = limit
+//                )[PREVIOUS_PAGE_KEY],
+//                nextPage = calculatePage(
+//                    user = user.list,
+//                    page = page,
+//                    limit = limit
+//                )[NEXT_PAGE_KEY],
+//                listUsers = provideUsers(
+//                    user = user.list,
+//                    page = page,
+//                    limit = limit
+//                )
             )
         } else {
             ApiResponse(

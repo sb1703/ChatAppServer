@@ -83,10 +83,10 @@ class RoomController(
                 it.value.socket?.send(Frame.Text(parsedMessage))
             }
         }
-//        users.values.forEach { user ->
-//            val parsedMessage = Json.encodeToString(messageEntity)
-//            user.socket?.send(Frame.Text(parsedMessage))
-//        }
+        //        users.values.forEach { user ->
+        //            val parsedMessage = Json.encodeToString(messageEntity)
+        //            user.socket?.send(Frame.Text(parsedMessage))
+        //        }
     }
 
 //    suspend fun fetchMessages(): List<Message> {
