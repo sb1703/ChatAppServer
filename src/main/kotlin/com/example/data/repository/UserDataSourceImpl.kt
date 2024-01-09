@@ -6,10 +6,12 @@ import com.example.domain.repository.UserDataSource
 import com.example.util.Constants
 import com.example.util.Constants.NEXT_PAGE_KEY
 import com.example.util.Constants.PREVIOUS_PAGE_KEY
+import io.ktor.server.application.*
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import org.litote.kmongo.regex
 import org.litote.kmongo.setValue
+import org.slf4j.LoggerFactory
 
 class UserDataSourceImpl(
     database: CoroutineDatabase
@@ -30,7 +32,16 @@ class UserDataSourceImpl(
     }
 
     override suspend fun saveUserInfo(user: User): Boolean {
+        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+        if (logger != null) {
+            logger.info("USERNAME: ${user.name} 4")
+        }
         val existingUser = users.findOne(filter = User::userId eq user.userId)
+        if (logger != null) {
+            if (existingUser != null) {
+                logger.info("USERNAME: ${existingUser.name} 4#")
+            }
+        }
         return if (existingUser == null) {
             users.insertOne(document = user).wasAcknowledged()
         } else {
