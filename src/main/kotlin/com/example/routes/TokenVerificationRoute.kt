@@ -52,6 +52,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
     val name = result.payload["name"].toString()
     val emailAddress = result.payload["email"].toString()
     val profilePhoto = result.payload["picture"].toString()
+    app.log.info("USERNAME: $name")
     val user = User(
         id = sub,
         name = name,
