@@ -34,12 +34,12 @@ class UserDataSourceImpl(
     override suspend fun saveUserInfo(user: User): Boolean {
         val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
         if (logger != null) {
-            logger.info("USERNAME: ${user.name} 4")
+            logger.info("USERNAME-SUI: ${user.name}")
         }
         val existingUser = users.findOne(filter = User::userId eq user.userId)
         if (logger != null) {
             if (existingUser != null) {
-                logger.info("USERNAME: ${existingUser.name} 4#")
+                logger.info("USERNAME-SUI-EXISTING-USER: ${existingUser.name}")
             }
         }
         return if (existingUser == null) {
@@ -136,8 +136,8 @@ class UserDataSourceImpl(
 //            error case
             false
         } else {
-            val list1 = existingUser.list?.plus(existingUser2)
-            val list2 = existingUser2.list?.plus(existingUser)
+            val list1 = existingUser.list.plus(existingUser2)
+            val list2 = existingUser2.list.plus(existingUser)
             users.updateOne(
                 filter = User::userId eq userId,
                 update = setValue(

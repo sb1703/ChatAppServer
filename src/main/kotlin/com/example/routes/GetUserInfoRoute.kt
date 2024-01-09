@@ -22,7 +22,7 @@ fun Route.getUserInfoRoute(
                 call.respondRedirect(Endpoint.Unauthorized.path)
             } else {
                 try {
-                    app.log.info("USERNAME: ${userSession.name} 3")
+                    app.log.info("USERNAME-USER-GET: ${userSession.name}")
                     call.respond(
                         message = ApiResponse(
                             success = true,

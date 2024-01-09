@@ -52,7 +52,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
     val name = result.payload["name"].toString()
     val emailAddress = result.payload["email"].toString()
     val profilePhoto = result.payload["picture"].toString()
-    app.log.info("USERNAME: $name 1")
+    app.log.info("USERNAME-BEFORE-IF: $name")
     val user = User(
         id = sub,
         name = name,
@@ -64,7 +64,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
         val response = userDataSource.saveUserInfo(user = user)
         if (response) {
             app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
-            app.log.info("USERNAME: $name 2")
+            app.log.info("USERNAME-AFTER-IF: $name")
             call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
             call.respondRedirect(Endpoint.Authorized.path)
         } else {
@@ -72,7 +72,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
             call.respondRedirect(Endpoint.Unauthorized.path)
         }
     } else {
-        app.log.info("USERNAME: $name 2#")
+        app.log.info("USERNAME-ElSE: $name")
         call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
         call.respondRedirect(Endpoint.Authorized.path)
     }
