@@ -23,6 +23,11 @@ fun Route.getUserInfoRoute(
             } else {
                 try {
                     app.log.info("USERNAME-USER-GET: ${userSession.name}")
+                    app.log.info("USERNAME-USER-GET-MAIL: ${userSession.mail}")
+                    val user = userDataSource.getUserInfoByMail(mail = userSession.mail)
+                    if (user != null) {
+                        app.log.info("USERNAME-USER-GET-BY-MAIL: ${user.name}")
+                    }
                     call.respond(
                         message = ApiResponse(
                             success = true,
