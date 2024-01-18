@@ -60,22 +60,32 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
         profilePhoto = profilePhoto,
         socket = null
     )
-    if(userDataSource.getUserInfoByMail(emailAddress) == null) {
-        val response = userDataSource.saveUserInfo(user = user)
-        if (response) {
-            app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
-            app.log.info("USERNAME-AFTER-IF: $name")
-            call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
-            call.respondRedirect(Endpoint.Authorized.path)
-        } else {
-            app.log.info("ERROR SAVING THE USER")
-            call.respondRedirect(Endpoint.Unauthorized.path)
-        }
-    } else {
-        app.log.info("USERNAME-ElSE: $name")
+    val response = userDataSource.saveUserInfo(user = user)
+    if (response) {
+        app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+        app.log.info("USERNAME-AFTER-IF: $name")
         call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
         call.respondRedirect(Endpoint.Authorized.path)
+    } else {
+        app.log.info("ERROR SAVING THE USER")
+        call.respondRedirect(Endpoint.Unauthorized.path)
     }
+//    if(userDataSource.getUserInfoByMail(emailAddress) == null) {
+//        val response = userDataSource.saveUserInfo(user = user)
+//        if (response) {
+//            app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+//            app.log.info("USERNAME-AFTER-IF: $name")
+//            call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+//            call.respondRedirect(Endpoint.Authorized.path)
+//        } else {
+//            app.log.info("ERROR SAVING THE USER")
+//            call.respondRedirect(Endpoint.Unauthorized.path)
+//        }
+//    } else {
+//        app.log.info("USERNAME-ElSE: $name")
+//        call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+//        call.respondRedirect(Endpoint.Authorized.path)
+//    }
 }
 
 fun verifyGoogleTokenId(tokenId: String): GoogleIdToken? {

@@ -36,7 +36,8 @@ class UserDataSourceImpl(
         if (logger != null) {
             logger.info("USERNAME-SUI: ${user.name}")
         }
-        val existingUser = users.findOne(filter = User::userId eq user.userId)
+//        val existingUser = users.findOne(filter = User::userId eq user.userId)
+        val existingUser = users.findOne(filter = User::emailAddress eq user.emailAddress)
         if (logger != null) {
             if (existingUser != null) {
                 logger.info("USERNAME-SUI-EXISTING-USER: ${existingUser.name}")
