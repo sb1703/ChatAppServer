@@ -7,7 +7,11 @@ import com.example.util.Constants
 import com.example.util.Constants.NEXT_PAGE_KEY
 import com.example.util.Constants.PREVIOUS_PAGE_KEY
 import io.ktor.server.application.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.bson.BsonDocument
 import org.litote.kmongo.coroutine.CoroutineDatabase
+import org.litote.kmongo.coroutine.insertOne
 import org.litote.kmongo.eq
 import org.litote.kmongo.regex
 import org.litote.kmongo.setValue
@@ -44,7 +48,10 @@ class UserDataSourceImpl(
             }
         }
         return if (existingUser == null) {
-            users.insertOne(document = user).wasAcknowledged()
+            val userDocument = BsonDocument.parse(Json.encodeToString(user))
+            val deserializedUser = Json.decodeFromString<User>(userDocument.toJson())
+            users.insertOne(deserializedUser).wasAcknowledged()
+//            users.insertOne(document = user).wasAcknowledged()
         } else {
             true
         }
