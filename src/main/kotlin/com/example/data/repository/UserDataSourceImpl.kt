@@ -36,26 +36,35 @@ class UserDataSourceImpl(
     }
 
     override suspend fun saveUserInfo(user: User): Boolean {
-        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
-        if (logger != null) {
-            logger.info("USERNAME-SUI: ${user.name}")
-        }
-//        val existingUser = users.findOne(filter = User::userId eq user.userId)
-        val existingUser = users.findOne(filter = User::emailAddress eq user.emailAddress)
-        if (logger != null) {
-            if (existingUser != null) {
-                logger.info("USERNAME-SUI-EXISTING-USER: ${existingUser.name}")
-            }
-        }
+        val existingUser = users.findOne(filter = User::userId eq user.userId)
         return if (existingUser == null) {
-            val userDocument = BsonDocument.parse(Json.encodeToString(user))
-            val deserializedUser = Json.decodeFromString<User>(userDocument.toJson())
-            users.insertOne(deserializedUser).wasAcknowledged()
-//            users.insertOne(document = user).wasAcknowledged()
+            users.insertOne(document = user).wasAcknowledged()
         } else {
             true
         }
     }
+
+//    override suspend fun saveUserInfo(user: User): Boolean {
+//        val logger: org.slf4j.Logger? = LoggerFactory.getLogger("MyLogger")
+//        if (logger != null) {
+//            logger.info("USERNAME-SUI: ${user.name}")
+//        }
+////        val existingUser = users.findOne(filter = User::userId eq user.userId)
+//        val existingUser = users.findOne(filter = User::emailAddress eq user.emailAddress)
+//        if (logger != null) {
+//            if (existingUser != null) {
+//                logger.info("USERNAME-SUI-EXISTING-USER: ${existingUser.name}")
+//            }
+//        }
+//        return if (existingUser == null) {
+//            val userDocument = BsonDocument.parse(Json.encodeToString(user))
+//            val deserializedUser = Json.decodeFromString<User>(userDocument.toJson())
+//            users.insertOne(deserializedUser).wasAcknowledged()
+////            users.insertOne(document = user).wasAcknowledged()
+//        } else {
+//            true
+//        }
+//    }
 
     override suspend fun deleteUser(userId: String): Boolean {
         return users.deleteOne(filter = User::userId eq userId).wasAcknowledged()

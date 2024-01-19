@@ -52,40 +52,22 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
     val name = result.payload["name"].toString()
     val emailAddress = result.payload["email"].toString()
     val profilePhoto = result.payload["picture"].toString()
-    app.log.info("USERNAME-BEFORE-IF: $name")
     val user = User(
         id = sub,
         name = name,
         emailAddress = emailAddress,
-        profilePhoto = profilePhoto,
-        socket = null
+        profilePhoto = profilePhoto
     )
+
     val response = userDataSource.saveUserInfo(user = user)
     if (response) {
         app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
-        app.log.info("USERNAME-AFTER-IF: $name")
         call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
         call.respondRedirect(Endpoint.Authorized.path)
     } else {
         app.log.info("ERROR SAVING THE USER")
         call.respondRedirect(Endpoint.Unauthorized.path)
     }
-//    if(userDataSource.getUserInfoByMail(emailAddress) == null) {
-//        val response = userDataSource.saveUserInfo(user = user)
-//        if (response) {
-//            app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
-//            app.log.info("USERNAME-AFTER-IF: $name")
-//            call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
-//            call.respondRedirect(Endpoint.Authorized.path)
-//        } else {
-//            app.log.info("ERROR SAVING THE USER")
-//            call.respondRedirect(Endpoint.Unauthorized.path)
-//        }
-//    } else {
-//        app.log.info("USERNAME-ElSE: $name")
-//        call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
-//        call.respondRedirect(Endpoint.Authorized.path)
-//    }
 }
 
 fun verifyGoogleTokenId(tokenId: String): GoogleIdToken? {
@@ -99,3 +81,60 @@ fun verifyGoogleTokenId(tokenId: String): GoogleIdToken? {
         null
     }
 }
+
+//private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(
+//    app: Application,
+//    result: GoogleIdToken,
+//    userDataSource: UserDataSource
+//) {
+//    val sub = result.payload["sub"].toString()
+//    val name = result.payload["name"].toString()
+//    val emailAddress = result.payload["email"].toString()
+//    val profilePhoto = result.payload["picture"].toString()
+//    app.log.info("USERNAME-BEFORE-IF: $name")
+//    val user = User(
+//        id = sub,
+//        name = name,
+//        emailAddress = emailAddress,
+//        profilePhoto = profilePhoto,
+//        socket = null
+//    )
+//    val response = userDataSource.saveUserInfo(user = user)
+//    if (response) {
+//        app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+//        app.log.info("USERNAME-AFTER-IF: $name")
+//        call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+//        call.respondRedirect(Endpoint.Authorized.path)
+//    } else {
+//        app.log.info("ERROR SAVING THE USER")
+//        call.respondRedirect(Endpoint.Unauthorized.path)
+//    }
+////    if(userDataSource.getUserInfoByMail(emailAddress) == null) {
+////        val response = userDataSource.saveUserInfo(user = user)
+////        if (response) {
+////            app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
+////            app.log.info("USERNAME-AFTER-IF: $name")
+////            call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+////            call.respondRedirect(Endpoint.Authorized.path)
+////        } else {
+////            app.log.info("ERROR SAVING THE USER")
+////            call.respondRedirect(Endpoint.Unauthorized.path)
+////        }
+////    } else {
+////        app.log.info("USERNAME-ElSE: $name")
+////        call.sessions.set(UserSession(id = sub, name = name, mail = emailAddress))
+////        call.respondRedirect(Endpoint.Authorized.path)
+////    }
+//}
+//
+//fun verifyGoogleTokenId(tokenId: String): GoogleIdToken? {
+//    return try {
+//        val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
+//            .setAudience(listOf(AUDIENCE))
+//            .setIssuer(ISSUER)
+//            .build()
+//        verifier.verify(tokenId)
+//    } catch (e: Exception) {
+//        null
+//    }
+//}
